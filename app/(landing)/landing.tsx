@@ -1,7 +1,8 @@
 import { View, Text, TouchableOpacity, FlatList, Dimensions, Image} from "react-native"
 import React from "react"
 import { useState, useRef } from "react"
-
+import { setLaunched } from "@/service/launchService"
+import { Redirect, router } from "expo-router"
 
 const slides = [
   {
@@ -31,6 +32,11 @@ const slides = [
 ]
 
 const {width , height} =  Dimensions.get('window')
+
+const handleGetStarted = async () => {
+    await setLaunched()
+    router.replace('/register')
+}
 
 const Landing = () => {
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
@@ -62,13 +68,14 @@ const Landing = () => {
               ))
           }
         </View>
-        <View className="pt-4 bg-[#3B82F6] items-center" style={{width:width, height: height / 4, borderTopRightRadius: 70, borderTopLeftRadius: 70,justifyContent: 'center'}}>
+        <View className="bg-[#3B82F6] items-center" style={{width:width, height: height / 4, borderTopRightRadius: 70, borderTopLeftRadius: 70,justifyContent: 'center'}}>
+            <Text className="text-2xl font-semibold text-center mb-1 text-[#FFFFFF]">SkillLink</Text>
             <Text className="text-xl font-semibold text-center mb-2 text-[#FFFFFF]">Ready to get started?</Text>
             <Text className="text-center px-6 mb-2 text-[#DBEAFE]">
                 Join SkillLink and connect with professionals today
             </Text>
             <TouchableOpacity className="mt-1 px-6 py-3 bg-[#1E40AF] rounded-full w-[50%] self-center items-center">
-                <Text className="text-white font-semibold text-center">Get Started</Text>
+                <Text className="text-white font-semibold text-center" onPress={handleGetStarted}>Get Started</Text>
             </TouchableOpacity>
         </View>   
     </View>
