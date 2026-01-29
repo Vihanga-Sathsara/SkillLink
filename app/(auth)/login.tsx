@@ -1,10 +1,37 @@
+import { loginUser } from "@/service/authService"
 import { router } from "expo-router"
-import React from "react"
+import React, { useEffect } from "react"
 
 import { View, Text, Dimensions, Pressable, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native"
 
 const handleNavigate = () => {
     router.replace("/register")
+}
+
+const loginUserWithEmailAndPassword = async (email: string, password: string) => {
+    if (!email || !password) {
+        alert("Please fill in all fields.")
+        return
+    }
+    try {
+        const res = await loginUser(email, password)
+
+        if (!res) {
+            alert("User details not found.")
+            return
+        }
+
+        if (res.role === "freelancer") {
+            router.replace("/freelancerDashboard")
+        }else if (res.role === "client") {
+            router.replace("/clientDashboard")
+        }
+        console.log("Login Success: ", res)
+        
+    }catch (error) {
+        console.error("Login Error: ", error)
+        alert("Error logging in user")
+    }
 }
 
 const Login = () => {
@@ -20,7 +47,7 @@ const Login = () => {
             <Text className="text-center font-semibold text-gray-500 mb-5">Login to access your account and connect with professionals or clients instantly.</Text>
             <Text className="text-2xl font-bold mb-4">Login</Text>
             <View className="w-full items-center">
-              <Pressable className="w-full items-center bg-gray-200 p-3 rounded-md mb-4">
+              <Pressable className="w-full items-center  bg-white border border-gray-300 p-3 rounded-md mb-4">
                 <Text>Google Login</Text>
               </Pressable>
             </View>
@@ -29,7 +56,7 @@ const Login = () => {
               <TextInput placeholder="Email" className="w-full p-3 border rounded-md mb-4" value={email} onChangeText={setEmail}></TextInput>
               <TextInput placeholder="Password" className="w-full p-3 border rounded-md mb-4" value={password} onChangeText={setPassword} secureTextEntry></TextInput>
               <Text className="mb-4">If you don't have an account, please <Pressable onPress={handleNavigate}><Text className="text-blue-500">register</Text></Pressable></Text>
-              <Pressable className="w-full items-center bg-[#1E40AF] p-3 rounded-md mb-4">
+              <Pressable className="w-full items-center bg-[#1E40AF] p-3 rounded-md mb-4" onPress={() => loginUserWithEmailAndPassword(email, password)}>
                 <Text className="text-white font-bold">Login</Text>
               </Pressable>
             </View>
