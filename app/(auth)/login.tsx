@@ -21,9 +21,9 @@ const loginUserWithEmailAndPassword = async (email: string, password: string) =>
             return
         }
 
-        if (res.role === "freelancer") {
+        if (res === "freelancer") {
             router.replace("/freelancerDashboard")
-        }else if (res.role === "client") {
+        }else if (res === "client") {
             router.replace("/clientDashboard")
         }
         console.log("Login Success: ", res)

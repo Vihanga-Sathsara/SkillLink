@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, FlatList, Dimensions, Image} from "react-native"
 import React from "react"
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { setLaunched } from "@/service/launchService"
-import { Redirect, router } from "expo-router"
+import { router } from "expo-router"
 
 const slides = [
   {
@@ -54,7 +54,7 @@ const Landing = () => {
                 setCurrentSlideIndex(currentIndex)
             }}
             renderItem={({ item }) => (
-                <View style={{width , height: height/4 * 3}} className="flex-1 bg-white justify-center items-center">
+                <View style={{width , height: height/3 * 2}} className="flex-1 bg-white justify-center items-center">
                     <Image source={item.image} style={{width: '100%', height: '50%', resizeMode: 'contain'}} />
                     <Text className="font-semibold text-2xl pt-3">{item.title}</Text>
                     <Text className="text-center px-4 pt-2">{item.description}</Text>
@@ -68,13 +68,13 @@ const Landing = () => {
               ))
           }
         </View>
-        <View className="bg-[#3B82F6] items-center" style={{width:width, height: height / 4, borderTopRightRadius: 70, borderTopLeftRadius: 70,justifyContent: 'center'}}>
+        <View className="bg-[#3B82F6] items-center" style={{width:width, height: height / 3, borderTopRightRadius: 70, borderTopLeftRadius: 70,justifyContent: 'center'}}>
             <Text className="text-2xl font-semibold text-center mb-1 text-[#FFFFFF]">SkillLink</Text>
             <Text className="text-xl font-semibold text-center mb-2 text-[#FFFFFF]">Ready to get started?</Text>
             <Text className="text-center px-6 mb-2 text-[#DBEAFE]">
                 Join SkillLink and connect with professionals today
             </Text>
-            <TouchableOpacity className="mt-1 px-6 py-3 bg-[#1E40AF] rounded-full w-[50%] self-center items-center">
+            <TouchableOpacity className="mt-1 px-6 py-3 bg-[#1E40AF] rounded-full w-[50%] self-center items-center mb-5">
                 <Text className="text-white font-semibold text-center" onPress={handleGetStarted}>Get Started</Text>
             </TouchableOpacity>
         </View>   

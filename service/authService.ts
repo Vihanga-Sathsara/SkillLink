@@ -1,8 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithCredential, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth"
 import { auth, db } from "./firebase"
 import { doc, getDoc, setDoc } from "firebase/firestore"
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry"
-import { use } from "react"
 
 export const registerUser = async (fullName: string, email: string, password: string, role: string) => {
     const userCredentials = await createUserWithEmailAndPassword(auth, email, password)
@@ -38,8 +36,17 @@ export const loginUser = async (email: string, password: string) => {
     const userDetailsRef = doc(db, "users", res.user.uid)
     const userDetails = await getDoc(userDetailsRef)
     if (userDetails.exists()) {
-      return userDetails.data()
+      return userDetails.data().role
     }
   }
   return null
+}
+
+
+export const getUserDetails = async (uid: string) => {
+    const userDoc = await getDoc(doc(db, "users", uid))
+    if (userDoc.exists()) {
+        return userDoc.data()
+    }
+    return null
 }
