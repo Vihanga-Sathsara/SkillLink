@@ -38,11 +38,11 @@ const Index = () => {
         const userData = docSnap.data()
         if (userData.role === "freelancer") {
           console.log("Navigating to freelancer dashboard")
-          setPage("/freelancerDashboard")
+          setPage("/(freelancer-tabs)/freelancerDashboard")
 
         }
         else if (userData.role === "client") {
-          setPage("/clientDashboard")
+          setPage("/(client-tabs)/clientDashboard")
         }
       } else {
         setPage("/login")

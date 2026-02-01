@@ -8,7 +8,7 @@ import { makeRedirectUri } from "expo-auth-session"
 export const useGoogleAuth = (role: string) => {
   
     const [request, response, promptAsync] = Google.useAuthRequest({
-      responseType: "id_token", // මේක අනිවාර්යයි
+      responseType: "id_token", 
       scopes: ["profile", "email"],
     })
       

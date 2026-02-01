@@ -9,6 +9,11 @@ export const registerUser = async (fullName: string, email: string, password: st
         fullName,
         email,
         role,
+        profileImage: null,
+        feedback: 0,
+        bio: null,
+        country: null,
+        address: null,
         createdAt: new Date()
     })
     return userCredentials.user
@@ -17,7 +22,7 @@ export const registerUser = async (fullName: string, email: string, password: st
 export const googleRegister = async (idToken: string, role: string) => {
 
   const credentials = GoogleAuthProvider.credential(idToken)
-  // Firebase popup for web
+  
   const userCredentials = await signInWithCredential(auth, credentials)
   const user = userCredentials.user
 
