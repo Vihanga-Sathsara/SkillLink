@@ -140,8 +140,8 @@ export default function createGig() {
       <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
         <View style={{ width:width,height:height, alignItems:"center", justifyContent:"space-between", backgroundColor:"#F9FAFB"}}>
           <View className="w-[90%] h-[90%] justify-center">
-            <Text className="text-[#111827] text-3xl text-center font-bold mb-4">Create a New Gig</Text>
-            <Text className="text-center font-semibold text-gray-500 mb-5">Showcase your skills and attract clients by creating a compelling gig.</Text>
+            <Text className="text-[#111827] text-3xl font-bold">Create a New Gig</Text>
+            <Text className="font-semibold text-gray-500 mb-5">Showcase your skills and attract clients by creating a compelling gig.</Text>
             <View>
               <TextInput placeholder="Gig Title" className="w-full p-3 border rounded-md mb-4" value={gigTitle} onChangeText={setGigTitle}></TextInput>
               <TextInput multiline numberOfLines={5} textAlignVertical="top" placeholder="Describe your gig..." className="w-full p-3 border rounded-md mb-4" value={gigDescription} onChangeText={setGigDescription}></TextInput>
@@ -149,7 +149,7 @@ export default function createGig() {
                 <Picker selectedValue={category} onValueChange={(itemValue) => setCategory(itemValue)} >
                   <Picker.Item label="Select Category" value={null} style={{ color: "gray" }}/>
                   {categories.map((cat) => (
-                    <Picker.Item key={cat.id} label={cat.name} value={cat.id} />
+                    <Picker.Item key={cat.id} label={cat.name} value={cat.name} />
                   ))}
                 </Picker>
               </View>

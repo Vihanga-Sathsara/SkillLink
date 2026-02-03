@@ -9,11 +9,12 @@ export const registerUser = async (fullName: string, email: string, password: st
         fullName,
         email,
         role,
-        profileImage: null,
+        profileImage: "",
+        bannerImage: "",
         feedback: 0,
-        bio: null,
-        country: null,
-        address: null,
+        bio: "",
+        country: "",
+        address: "",
         createdAt: new Date()
     })
     return userCredentials.user
@@ -30,6 +31,12 @@ export const googleRegister = async (idToken: string, role: string) => {
     fullName: user.displayName,
     email: user.email,
     role,
+    profileImage: "",
+    bannerImage: "",
+    feedback: 0,
+    bio: "",
+    country: "",
+    address: "",
     createdAt: new Date()
   })
   return user

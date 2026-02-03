@@ -45,10 +45,18 @@ const [seeDescription,setSeeDescription] = React.useState(false)
         </Pressable>
         <View className="w-[90%] bg-white rounded-xl p-4">
             <Text className="text-black text-2xl font-semibold mb-4">Preview</Text>
+
+            {
+                image ? (
+                    <Image source={{ uri: image }} className="w-full h-[200px] rounded-lg mb-4"/>
+                ) : (
+                    <View className="w-full h-[200px] bg-gray-200 rounded-lg mb-4 items-center justify-center">
+                        <Ionicons name="image-outline" size={60} color="#6B7280" />
+                        <Text className="text-gray-500 mt-2">No Image Selected</Text>
+                    </View>
+                )
+            }
             
-            {image && (
-                <Image source={{ uri: image }} className="w-full h-[200px] rounded-lg mb-4"/>
-            )}
             <Text className="text-xl font-bold mb-4">{gigTitle}</Text>
             <View className="w-full flex-row justify-between mb-4">
                 <Text className="font-semibold">Price: ${price}</Text>

@@ -1,9 +1,9 @@
 import { View, Text } from "react-native"
 
-export default function Earning() {
+export default function Request() {
     return (
       <View className = "flex-1 justify-center items-center">
-        <Text>Earning</Text>
+        <Text>Request</Text>
       </View>
     )
 }
