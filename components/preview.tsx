@@ -4,9 +4,6 @@ import { getUserDetails } from "@/service/authService"
 import { auth } from "@/service/firebase"
 import { Ionicons } from "@expo/vector-icons"
 
-const [name, setName] = React.useState<string | undefined>("")
-const [feedback, setFeedback] = React.useState<number | undefined>(0)
-const [profileImage, setProfileImage] = React.useState<string | null>(null)
 
 type Props = {
   visible: boolean
@@ -19,6 +16,14 @@ type Props = {
   name?: string
   feedback?: number
 }
+
+const GigPreviewModal = ({visible,onClose,gigTitle,gigDescription,price,deliveryTime,image}: Props) => {
+const [name, setName] = React.useState<string | undefined>("")
+const [feedback, setFeedback] = React.useState<number | undefined>(0)
+const [profileImage, setProfileImage] = React.useState<string | null>("")
+const [seeDescription,setSeeDescription] = React.useState(false)
+
+
 
 useEffect(() => {
     const fetchUserDetails = async () => {
@@ -34,9 +39,6 @@ useEffect(() => {
     fetchUserDetails()
 }, [])
 
-const GigPreviewModal = ({visible,onClose,gigTitle,gigDescription,price,deliveryTime,image}: Props) => {
-
-const [seeDescription,setSeeDescription] = React.useState(false)
   return (
     <Modal visible={visible} animationType="slide" transparent>
       <View className="flex-1 bg-black/50 justify-center items-center">
@@ -91,7 +93,7 @@ const [seeDescription,setSeeDescription] = React.useState(false)
         </View>
       </View>
     </Modal>
-  );
-};
+  )
+}
 
 export default GigPreviewModal

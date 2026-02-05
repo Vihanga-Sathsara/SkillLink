@@ -1,12 +1,16 @@
 import { View, Text, Pressable, ScrollView,Image } from "react-native"
 import React, { useEffect, useState } from "react"
-import { getFreelancerGigsByUserId } from "@/service/freelancerService"
+import { deleteGig, getFreelancerGigsByUserId } from "@/service/freelancerService"
 import { auth } from "@/service/firebase"
 import { Ionicons } from "@expo/vector-icons"
+import GigUpdateModal from "@/components/UpdateGig"
 
 export default function activeGigs() {
   const [gigs, setGigs] = useState<any[]>([])
   const [seeDescription,setSeeDescription] = React.useState(false)
+  const [editModalVisible, setEditModalVisible] = React.useState(false)
+  const [selectedGig, setSelectedGig] = useState<any>(null)
+
 
   useEffect(() => {
     fetchGigs()
@@ -25,6 +29,22 @@ export default function activeGigs() {
         console.error("Error fetching gigs: ", error)
         alert("An error occurred while fetching gigs.")
      }
+  }
+
+  const showEditModal = (gig:any) => {
+    setSelectedGig(gig)
+    setEditModalVisible(true)
+  }
+
+  const deleteGigHandler = async (gigId: string) => {
+    try {
+      await deleteGig(gigId)
+      fetchGigs()
+      alert("Gig deleted successfully!")
+    } catch (error) {
+      console.error("Error deleting gig: ", error)
+      alert("An error occurred while deleting the gig.")
+    }
   }
     return (
       <ScrollView>
@@ -63,17 +83,23 @@ export default function activeGigs() {
             }
                     
             <View className="flex-row mt-3">
-              <Pressable className="bg-blue-600 px-4 py-2 rounded-md mr-3">
+              <Pressable className="bg-blue-600 px-4 py-2 rounded-md mr-3" onPress={() => showEditModal(gig)}>
                 <Text className="text-white">Edit</Text>
               </Pressable>
 
-              <Pressable className="bg-red-600 px-4 py-2 rounded-md">
+              <Pressable className="bg-red-600 px-4 py-2 rounded-md" onPress={() => deleteGigHandler(gig.id)}>
                 <Text className="text-white">Delete</Text>
               </Pressable>
             </View>
           </View>
         ))}
         </View>
+        {
+          selectedGig && (
+            <GigUpdateModal visible={editModalVisible} onClose={() => setEditModalVisible(false)}  gig={selectedGig} onUpdateSuccess={fetchGigs} />
+          )
+        }
       </ScrollView>
+      
     )
 }

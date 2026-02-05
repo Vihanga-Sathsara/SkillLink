@@ -1,6 +1,6 @@
-import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithCredential, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { auth, db } from "./firebase"
-import { doc, getDoc, setDoc } from "firebase/firestore"
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
 
 export const registerUser = async (fullName: string, email: string, password: string, role: string) => {
     const userCredentials = await createUserWithEmailAndPassword(auth, email, password)
@@ -54,11 +54,22 @@ export const loginUser = async (email: string, password: string) => {
   return null
 }
 
-
 export const getUserDetails = async (uid: string) => {
     const userDoc = await getDoc(doc(db, "users", uid))
     if (userDoc.exists()) {
         return userDoc.data()
     }
     return null
+}
+
+export const updateDetails = async (user: any, updates: any) => {
+  if (!user) throw new Error("User not logged in")
+    if (updates.fullName) {
+        await updateProfile(user, { displayName: updates.fullName })
+    }
+    await updateDoc(doc(db, "users", user.uid), updates)
+}
+
+export const logoutUser = async () => {
+    await signOut(auth)
 }

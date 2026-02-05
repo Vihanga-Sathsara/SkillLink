@@ -3,6 +3,10 @@ import { View, Text, Dimensions, TouchableOpacity, FlatList, Image, Pressable, S
 import { auth } from "@/service/firebase"
 import { Ionicons } from "@expo/vector-icons"
 import { LineChart } from "react-native-chart-kit"
+import { logoutUser } from "@/service/authService"
+import { router } from "expo-router"
+import React from "react"
+import Wallet from "@/components/wallet"
 
 const FreelancerDashboard = () => {
 
@@ -24,6 +28,20 @@ const FreelancerDashboard = () => {
             color: '#EF4444'
         }
     ]
+    const [previewVisible, setPreviewVisible] = React.useState(false)
+    const logoutUserHandler = async () => {
+        try {
+            await logoutUser()
+            router.replace('/login')
+        }catch (error) {
+            alert("Error logging out")
+            console.error("Logout Error: ", error)
+        }
+    }
+
+    const navigateWallet = () => {
+        setPreviewVisible(true)
+    }
 
 
     const {width , height} = Dimensions.get('window')
@@ -32,8 +50,18 @@ const FreelancerDashboard = () => {
     return (
      <ScrollView bounces={false} showsVerticalScrollIndicator={false}> 
       <View style={{ width:width, height:height, alignItems:"center"}}>
-        <View className="w-[90%] justify-center items-end mt-7 mb-5">
-            <Text className="text-xl font-bold">💰 Total Earning: </Text>
+        <View className="w-[90%] items-end flex flex-row justify-end gap-4 mt-7 mb-5">
+            <View className="items-center gap-2">
+                <Pressable className="flex flex-row items-center gap-1" onPress={navigateWallet}>
+                    <Ionicons name="wallet-outline" size={24} color="black" />
+                    <Text className="text-xl font-bold">Wallet</Text>
+                </Pressable>
+            </View>
+            <View className="flex flex-row items-center">
+                <Pressable onPress={logoutUserHandler}>
+                    <Ionicons name="log-out-outline" size={24} color="black" />
+                </Pressable>
+            </View>       
         </View>
         <View className="w-[90%] mb-5">
             <Text className="text-xl font-semibold">👋 Welcome, {auth.currentUser?.displayName}</Text>
@@ -145,6 +173,8 @@ const FreelancerDashboard = () => {
 
                 
             </View>
+
+            <Wallet visible={previewVisible} onClose={() => setPreviewVisible(false)} />
             
         </View>
     </ScrollView>   

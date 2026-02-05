@@ -1,4 +1,4 @@
-import { addDoc, collection, query, where, getDocs } from "firebase/firestore"
+import { addDoc, collection, query, where, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore"
 import { db } from "./firebase"
 
 
@@ -22,4 +22,13 @@ export const getFreelancerGigsByUserId = async (userId: string) => {
     const gigsSnapshot = await getDocs(q)
     const gigs = gigsSnapshot.docs.map((doc: { id: any; data: () => any }) => ({ id: doc.id, ...doc.data() }))
     return gigs
+}
+
+export const updateDetailsOfGig = async (gigId: string, updatedData: any) => {
+    const gigRef = doc(db, "gigs", gigId)
+    await updateDoc(gigRef, updatedData)
+}
+
+export const deleteGig = async (gigId: string) => {
+    await deleteDoc(doc(db, "gigs", gigId))
 }

@@ -56,7 +56,7 @@ export default function createGig() {
     });
 
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      setSelectedImage(result.assets[0].uri)
     }
   }
 
