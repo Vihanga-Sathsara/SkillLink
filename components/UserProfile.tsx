@@ -225,7 +225,7 @@ export const UserProfile = () => {
         }
     }
 
-     const pickBannerImage = async () => {
+    const pickBannerImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!')
@@ -415,7 +415,7 @@ export const UserProfile = () => {
                                 }                              
                             </View>
                             {
-                                verificationStatus === "not verified" || verificationStatus === "rejected" ? (
+                                verificationStatus === "not verified" || verificationStatus === "rejected" || verificationStatus === "" ? (
                                     <View>
                                         <Text className="text-xl mb-3">✅ Verification Submission Instructions</Text>
                                         <Text className="text-lg text-gray-600 mb-2">Please upload your verification documents as ONE PDF file that includes all of the following:</Text>
@@ -438,7 +438,7 @@ export const UserProfile = () => {
                         </View>
 
                         {
-                            verificationStatus === "not verified" || verificationStatus === "rejected" ?(
+                            verificationStatus === "not verified" || verificationStatus === "rejected" || verificationStatus === "" ?(
                                 verifyDocument ? (
                                     <View className="w-full h-[150px] bg-gray-200 rounded-lg mb-4 items-center justify-center">
                                         <Text className="text-gray-500 mt-2 text-center">Document Selected: {documentName}</Text>
@@ -455,7 +455,7 @@ export const UserProfile = () => {
                             ) : null
                         }
                         {
-                            verificationStatus === "not verified" || verificationStatus === "rejected" ?(
+                            verificationStatus === "not verified" || verificationStatus === "rejected" || verificationStatus === "" ?(
                                 <TouchableOpacity className={`w-full items-center ${verifyDocument ? 'bg-red-500' : 'bg-gray-400'} p-3 rounded-md mb-4`} onPress={() => sendVerificationDocument()} disabled={!verifyDocument}>
                                     <Text className="text-white font-semibold">Verify</Text>
                                 </TouchableOpacity>

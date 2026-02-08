@@ -144,7 +144,7 @@ export default function createGig() {
             <Text className="font-semibold text-gray-500 mb-5">Showcase your skills and attract clients by creating a compelling gig.</Text>
             <View>
               <TextInput placeholder="Gig Title" className="w-full p-3 border rounded-md mb-4" value={gigTitle} onChangeText={setGigTitle}></TextInput>
-              <TextInput multiline numberOfLines={5} textAlignVertical="top" placeholder="Describe your gig..." className="w-full p-3 border rounded-md mb-4" value={gigDescription} onChangeText={setGigDescription}></TextInput>
+              <TextInput multiline numberOfLines={5} textAlignVertical="top" placeholder="Describe your gig..." className="w-full p-3 border h-[200px] rounded-md mb-4" value={gigDescription} onChangeText={setGigDescription}></TextInput>
               <View className="w-full border rounded-md mb-4">
                 <Picker selectedValue={category} onValueChange={(itemValue) => setCategory(itemValue)} >
                   <Picker.Item label="Select Category" value={null} style={{ color: "gray" }}/>

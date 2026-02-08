@@ -1,15 +1,14 @@
 import { Category, getCategories } from "@/service/categoryService"
 import { uploadImageToCloudinary } from "@/service/cloudinaryService"
 import { auth } from "@/service/firebase"
-import { createFreelancerGig, updateDetailsOfGig } from "@/service/freelancerService"
+import { updateDetailsOfGig } from "@/service/freelancerService"
 import { Ionicons } from "@expo/vector-icons"
 import { Picker } from "@react-native-picker/picker"
 import React, { use, useEffect } from "react"
 import { KeyboardAvoidingView, TouchableWithoutFeedback, ScrollView, View, Pressable, TouchableOpacity, ActivityIndicator,Text, Keyboard, Platform, TextInput,Image, Dimensions,  Modal } from "react-native"
 import * as ImagePicker from "expo-image-picker"
 import GigPreviewModal from "./preview"
-import { useLoader } from "@/hooks/useLoader"
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry"
+
 
 
 interface GigUpdateModalProps {

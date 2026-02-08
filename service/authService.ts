@@ -73,3 +73,11 @@ export const updateDetails = async (user: any, updates: any) => {
 export const logoutUser = async () => {
     await signOut(auth)
 }
+
+export const getDetailsById = async (uid: string) => {
+    const userDoc = await getDoc(doc(db, "users", uid))
+    if (userDoc.exists()) {
+        return userDoc.data()
+    }
+    return null
+}

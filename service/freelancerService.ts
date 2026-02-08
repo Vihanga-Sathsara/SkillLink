@@ -32,3 +32,16 @@ export const updateDetailsOfGig = async (gigId: string, updatedData: any) => {
 export const deleteGig = async (gigId: string) => {
     await deleteDoc(doc(db, "gigs", gigId))
 }
+
+export const getAllGigs = async () => {
+    const gigsSnapshot = await getDocs(collection(db, "gigs"))
+    const gigs = gigsSnapshot.docs.map((doc: { id: any; data: () => any }) => ({ id: doc.id, ...doc.data() }))
+    return gigs
+}
+
+export const getGigsByCategory = async (category: string) => {
+    const q = query(collection(db, "gigs"), where("category", "==", category))
+    const gigsSnapshot = await getDocs(q)
+    const gigs = gigsSnapshot.docs.map((doc: { id: any; data: () => any }) => ({ id: doc.id, ...doc.data() }))
+    return gigs
+}

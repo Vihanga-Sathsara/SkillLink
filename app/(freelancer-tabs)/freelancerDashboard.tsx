@@ -29,6 +29,7 @@ const FreelancerDashboard = () => {
         }
     ]
     const [previewVisible, setPreviewVisible] = React.useState(false)
+    
     const logoutUserHandler = async () => {
         try {
             await logoutUser()
