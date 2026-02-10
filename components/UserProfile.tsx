@@ -11,6 +11,9 @@ import { uploadImageToCloudinary } from "@/service/cloudinaryService"
 import * as documentPicker from 'expo-document-picker'
 import { uploadPDFToCloudinary } from "@/service/cloudinaryService"
 import { getVerificationDataByUserId, saveVerificationData, updateVerificationStatus } from "@/service/verificationService"
+import { deleteGigsByUserId } from "@/service/freelancerService"
+import { deleteUserAccount } from "@/service/authService"
+import { router } from "expo-router"
 
 export const UserProfile = () => {
     const [name, setName] = React.useState<string | undefined>("")
@@ -102,7 +105,7 @@ export const UserProfile = () => {
     }
 
     const updateProfile = async () => {
-        showLoader()
+       if (isLoading) return
         if (!auth.currentUser) {
             alert("User not logged in")
             hideLoader()
@@ -121,6 +124,7 @@ export const UserProfile = () => {
             }
         }
         try {
+            showLoader()
             await updateDetails(auth.currentUser, updateData)
             alert("Profile updated successfully")
             setChangesMade(false)
@@ -261,7 +265,7 @@ export const UserProfile = () => {
 
    
     const sendVerificationDocument = async () => {
-        showLoader()
+        if (isLoading) return
         if (!auth.currentUser) {
             alert("User not logged in")
             hideLoader()
@@ -273,6 +277,7 @@ export const UserProfile = () => {
             return
         }
         try{
+            showLoader()
             const uploadedDocumentUrl = await uploadVerifyDocumentToServer()
             if (uploadedDocumentUrl) {
                 await saveVerificationData(auth.currentUser.uid, uploadedDocumentUrl)
@@ -298,12 +303,34 @@ export const UserProfile = () => {
         [
             { text: "Cancel", style: "cancel" },
             { text: "Delete", style: "destructive", onPress: () => {
-                
+                deleteAccount()
                 console.log("Account deleted")
             } 
             },
         ]
      )
+    }
+
+    const deleteAccount = async () => {
+        if (isLoading) return
+
+        if (!auth.currentUser) {
+            alert("User not logged in")
+            return
+        }
+
+        try {
+            showLoader()
+            await deleteGigsByUserId(auth.currentUser.uid)
+            await deleteUserAccount(auth.currentUser.uid)
+            alert("Account deleted successfully")
+            router.replace('/login')
+        } catch (error) {
+            console.error("Error deleting account: ", error)
+            alert("An error occurred while deleting the account. Please try again.")
+         } finally {
+            hideLoader()
+         }
     }
     
     const {width } =  Dimensions.get('window')
@@ -358,28 +385,28 @@ export const UserProfile = () => {
                             }
                         </View>
                         <View>
-                            <TextInput placeholder="Email" className="w-full p-3 border border-gray-200 rounded-md mb-4" editable={false}  value={email} onChangeText={setEmail} ></TextInput>
-                            <TextInput placeholder="Full Name" className="w-full p-3 border rounded-md mb-4"  value={name} onChangeText={setName} ></TextInput>
+                            <TextInput placeholder="Email" placeholderTextColor="#999999" className="w-full p-3 border border-gray-200 rounded-md mb-4" editable={false}  value={email} onChangeText={setEmail} ></TextInput>
+                            <TextInput placeholder="Full Name" placeholderTextColor="#999999" className="w-full p-3 border rounded-md mb-4"  value={name} onChangeText={setName} ></TextInput>
 
                             {
                                 bio ? (
-                                    <TextInput placeholder="Full Name" className="w-full p-3 border rounded-md mb-4"  value={bio} onChangeText={setBio}></TextInput>
+                                    <TextInput placeholder="Full Name" placeholderTextColor="#999999" className="w-full p-3 border rounded-md mb-4"  value={bio} onChangeText={setBio}></TextInput>
                                 ):(
-                                    <TextInput className="border border-red-700 rounded-lg p-3 pl-4 mb-4" multiline numberOfLines={ 8 } placeholder="Bio" value={bio || ""} onChangeText={setBio}></TextInput>
+                                    <TextInput className="border border-red-700 rounded-lg p-3 pl-4 mb-4" multiline numberOfLines={ 8 } placeholder="Bio" placeholderTextColor="#999999" value={bio || ""} onChangeText={setBio}></TextInput>
                                 )
                             }
                             {
                                 address ? (
-                                    <TextInput placeholder="Full Name" className="w-full p-3 border rounded-md mb-4"  value={address} onChangeText={setAddress}></TextInput>
+                                    <TextInput placeholder="Full Name" placeholderTextColor="#999999" className="w-full p-3 border rounded-md mb-4"  value={address} onChangeText={setAddress}></TextInput>
                                 ):(
-                                    <TextInput className="border border-red-700 rounded-lg p-3 pl-4 mb-4" multiline numberOfLines={ 5 } placeholder="Address" value={address || ""} onChangeText={setAddress}></TextInput>
+                                    <TextInput className="border border-red-700 rounded-lg p-3 pl-4 mb-4" multiline numberOfLines={ 5 } placeholder="Address" placeholderTextColor="#999999" value={address || ""} onChangeText={setAddress}></TextInput>
                                 )
                             }
                             {
                                 country ? (
-                                    <TextInput placeholder="Full Name" className="w-full p-3 border rounded-md mb-4"  value={country} onChangeText={setCountry}></TextInput>
+                                    <TextInput placeholder="Full Name" placeholderTextColor="#999999" className="w-full p-3 border rounded-md mb-4"  value={country} onChangeText={setCountry}></TextInput>
                                 ):(
-                                    <TextInput className="border border-red-700 rounded-lg p-3 pl-4 mb-4" placeholder="Country" value={country || ""} onChangeText={setCountry}></TextInput>
+                                    <TextInput className="border border-red-700 rounded-lg p-3 pl-4 mb-4" placeholder="Country" placeholderTextColor="#999999" value={country || ""} onChangeText={setCountry}></TextInput>
                                 )
                             }
 

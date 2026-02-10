@@ -201,8 +201,8 @@ const GigUpdateModal = ({visible, onClose, gig, onUpdateSuccess}: GigUpdateModal
             <Text className="text-[#111827] text-3xl font-bold">Update Your Gig</Text>
             <Text className="font-semibold text-gray-500 mb-5">Showcase your skills and attract clients by creating a compelling gig.</Text>
             <View>
-              <TextInput placeholder="Gig Title" className="w-full p-3 border rounded-md mb-4" value={gigTitle} onChangeText={setGigTitle}></TextInput>
-              <TextInput multiline numberOfLines={5} textAlignVertical="top" placeholder="Describe your gig..." className="w-full p-3 border rounded-md mb-4" value={gigDescription} onChangeText={setGigDescription}></TextInput>
+              <TextInput placeholder="Gig Title" placeholderTextColor="#999999" className="w-full p-3 border rounded-md mb-4" value={gigTitle} onChangeText={setGigTitle}></TextInput>
+              <TextInput multiline numberOfLines={5} textAlignVertical="top" placeholder="Describe your gig..." placeholderTextColor="#999999" className="w-full p-3 border rounded-md mb-4" value={gigDescription} onChangeText={setGigDescription}></TextInput>
               <View className="w-full border rounded-md mb-4">
                 <Picker selectedValue={category} onValueChange={(itemValue) => setCategory(itemValue)} >
                   <Picker.Item label="Select Category" value={null} style={{ color: "gray" }}/>
@@ -213,7 +213,7 @@ const GigUpdateModal = ({visible, onClose, gig, onUpdateSuccess}: GigUpdateModal
               </View>
               <View className="w-full flex-row items-center border rounded-md mb-4 px-3">
                 <Text className="absolute left-3 text-gray-500">$</Text>
-                <TextInput placeholder="Price" className="flex-1 p-3 pl-4" keyboardType="numeric" value={price} onChangeText={setPrice}></TextInput>
+                <TextInput placeholder="Price" placeholderTextColor="#999999" className="flex-1 p-3 pl-4" keyboardType="numeric" value={price} onChangeText={setPrice}></TextInput>
               </View>
               <View className="w-full border rounded-md mb-4">
                 <Picker selectedValue={deliveryTime} onValueChange={(itemValue) => setDeliveryTime(itemValue)}>

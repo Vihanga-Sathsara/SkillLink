@@ -1,9 +1,34 @@
-import { View, Text } from "react-native"
+import Project from "@/components/Project";
+import { getUserRole } from "@/service/authService";
+import { auth } from "@/service/firebase";
+import React from "react";
+import { Alert } from "react-native";
 
 export default function Request() {
+  const [role, setRole] = React.useState("");
+  React.useEffect(() => {
+    if (!auth.currentUser) {
+      Alert.alert(
+        "Authentication Error",
+        "User not authenticated. Please log in again.",
+      );
+      return;
+    }
+    const fetchUserRole = async () => {
+      try {
+        const role = await getUserRole(auth.currentUser!.uid);
+        setRole(role);
+      } catch (error) {
+        console.error("Error fetching user role: ", error);
+        Alert.alert("Error", "An error occurred while fetching user role.");
+      }
+    };
+    fetchUserRole();
+  }, [auth.currentUser?.uid])
+  
     return (
-      <View className = "flex-1 justify-center items-center">
-        <Text>Request</Text>
-      </View>
+      auth.currentUser?.uid ? (
+            <Project uid={auth.currentUser.uid} role={role}></Project>
+      ) : null
     )
 }

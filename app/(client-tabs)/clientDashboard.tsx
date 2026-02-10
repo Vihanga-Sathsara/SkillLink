@@ -7,7 +7,8 @@ import { Ionicons } from "@expo/vector-icons"
 import { Picker } from "@react-native-picker/picker"
 import { router } from "expo-router"
 import { useEffect, useState } from "react"
-import { View, Text, ScrollView, Pressable, Image, Dimensions } from "react-native"
+import { View, Text, ScrollView, Pressable, Image, Dimensions, Alert } from "react-native"
+import ShowProfile from "@/components/ShowProfile"
 
 
 export default function ClientDashboard() {
@@ -87,6 +88,24 @@ export default function ClientDashboard() {
       }
     }
 
+    const confirmRequest = () => {
+      Alert.alert(
+        "Confirm Request",
+        "Once you send a request for this project, it cannot be canceled later. Do you want to continue?",
+        [
+          {
+            text: "No",
+            style: "cancel"
+          },
+          {
+            text: "Yes",
+            onPress: () => setRequestModalVisible(true) 
+          }
+        ]
+      )
+    }
+
+
     return (
       <ScrollView>
       <View style={{ width:width, height:height, alignItems:"center"}}>
@@ -151,30 +170,13 @@ export default function ClientDashboard() {
          
             {
               gig.userId && (
-                 <View className="w-full flex-row gap-4 items-center mb-4">
-                                {
-                                    userDetails[gig.id]?.profileImage ? (
-                                        <Image
-                                        source={{ uri: userDetails[gig.id]?.profileImage }}
-                                        className="w-[50px] h-[50px] rounded-full"
-                                        />
-                                    ) : (
-                                        <View className="w-[50px] h-[50px] rounded-full bg-gray-200 items-center justify-center">
-                                        <Ionicons name="person" size={28} color="#6B7280" />
-                                        </View>
-                                    )
-                                }
-                                <View>
-                                    <Text className="text-black font-semibold">{userDetails[gig.id]?.fullName || "Freelancer Name"}</Text>
-                                    <Text className="text-gray-500 text-sm">{userDetails[gig.id]?.feedback ? `${userDetails[gig.id]?.feedback} positive feedback` : "No feedback available"}</Text>
-                                </View>
-                            </View>
+                 <ShowProfile uid={gig.userId} />
               )
             }
             
                     
             <View className="flex-row mt-3">
-               <Pressable className="bg-red-600 px-4 py-2 rounded-md mr-3" onPress={() => { setSelectedGig(gig); setRequestModalVisible(true); }}>
+               <Pressable className="bg-red-600 px-4 py-2 rounded-md mr-3" onPress={() => { setSelectedGig(gig); confirmRequest() }}>
                 <Text className="text-white font-semibold">Request</Text>
               </Pressable>
             </View>
@@ -182,7 +184,7 @@ export default function ClientDashboard() {
         ))}
         </View>
       </View>
-      <RequestModal visible={requestModalVisible} onClose={() => setRequestModalVisible(false)} gig={selectedGig} onUpdateSuccess={() => {setRequestModalVisible(false), fetchGigs() }} />
+      <RequestModal visible={requestModalVisible} onClose={() => setRequestModalVisible(false)} gig={selectedGig} onSuccess={() => {setRequestModalVisible(false), fetchGigs() }} />
       </ScrollView>
     )
 }

@@ -4,17 +4,29 @@ import { deleteGig, getFreelancerGigsByUserId } from "@/service/freelancerServic
 import { auth } from "@/service/firebase"
 import { Ionicons } from "@expo/vector-icons"
 import GigUpdateModal from "@/components/UpdateGig"
+import { useLoader } from "@/hooks/useLoader"
+import { completeProjectCountUsingGigId } from "@/service/requestService"
 
 export default function activeGigs() {
   const [gigs, setGigs] = useState<any[]>([])
   const [seeDescription,setSeeDescription] = React.useState(false)
   const [editModalVisible, setEditModalVisible] = React.useState(false)
   const [selectedGig, setSelectedGig] = useState<any>(null)
+  const { showLoader, hideLoader, isLoading } = useLoader()
+  const [completedCounts, setCompletedCounts] = useState<Record<string, number>>({})
+
+
 
 
   useEffect(() => {
     fetchGigs()
   }, [])
+
+  useEffect(() => {
+    gigs.forEach(gig => {
+      getCompletedProjectsCount(gig.id)
+    })
+  }, [gigs])
   
   const fetchGigs = async () => {
      try{
@@ -37,14 +49,32 @@ export default function activeGigs() {
   }
 
   const deleteGigHandler = async (gigId: string) => {
+    if(isLoading) return
     try {
+      showLoader()
       await deleteGig(gigId)
       fetchGigs()
       alert("Gig deleted successfully!")
     } catch (error) {
       console.error("Error deleting gig: ", error)
       alert("An error occurred while deleting the gig.")
+    } finally {
+      hideLoader()
     }
+  }
+
+  const getCompletedProjectsCount = async (gigId: string) => {
+    if(!auth.currentUser?.uid) {
+      console.error("User not authenticated")
+      return 
+     }
+     
+     try {
+        const res =  await completeProjectCountUsingGigId(auth.currentUser?.uid, gigId)
+        setCompletedCounts(prev => ({ ...prev, [gigId]: res }))
+     } catch (error) {
+        console.error("Error fetching completed projects count: ", error)
+     }
   }
     return (
       <ScrollView>
@@ -66,7 +96,7 @@ export default function activeGigs() {
                 )
             }
 
-            <Text className="text-gray-500 mb-2">Views {gig.views}</Text>
+            <Text className="text-gray-500 mb-2">Completed Projects: {completedCounts[gig.id] ?? 0}</Text>
             <View className="flex-row justify-between items-center mb-4">
                <Text className="text-gray-500">Price: ${gig.price}</Text>
                <Text className="text-gray-500">Category: {gig.category}</Text>

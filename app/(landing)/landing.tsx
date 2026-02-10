@@ -41,7 +41,7 @@ const handleGetStarted = async () => {
 const Landing = () => {
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   return (
-    <View style={{width:width , height: height}}>
+    <View style={{width:width , height: height, backgroundColor:"#ffffff"}}>
          <FlatList
             data={slides}
             horizontal
