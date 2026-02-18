@@ -9,33 +9,15 @@ import React from "react"
 import Wallet from "@/components/wallet"
 import { gigCountByUserId } from "@/service/freelancerService"
 import { completeProjectCount, pendingProjectCount, rejectedProjectCount } from "@/service/requestService"
+import Advertistments from "@/components/advertistments"
 
 const FreelancerDashboard = () => {
-
-    const slides = [
-        {
-            id: '1',
-            color: '#F59E0B'
-        },
-        {
-            id: '2',
-            color: '#3B82F6'
-        },
-        {
-            id: '3',
-            color: '#10B981'
-        },
-        {
-            id: '4',
-            color: '#EF4444'
-        }
-    ]
     const [previewVisible, setPreviewVisible] = React.useState(false)
     const [gigCount, setGigCount] = React.useState(0)
     const [completedCount, setCompletedCount] = React.useState(0)
     const [pendingCount, setPendingCount] = React.useState(0)
     const [rating , setRating] = React.useState(0)
-    const [rejectedCount, setRejectedCount] = React.useState(0)
+    const [rejectCount, setRejectCount] = React.useState(0)
     const [completePercentage, setCompletePercentage] = React.useState(0)
     const [pendingPercentage, setPendingPercentage] = React.useState(0)
     const [rejectedPercentage, setRejectedPercentage] = React.useState(0)
@@ -72,13 +54,13 @@ const FreelancerDashboard = () => {
         const rejectedCount = await rejectedProjectCount(auth.currentUser?.uid || "")
 
         const totalProjects = completeCount + pending + rejectedCount
-        const completePrecentage = parseFloat(((completeCount / totalProjects) * 100).toFixed(2))
-        const pendingPrecentage = parseFloat(((pending / totalProjects) * 100).toFixed(2))
-        const rejectedPrecentage = parseFloat(((rejectedCount / totalProjects) * 100).toFixed(2))
+        const completePrecentage = totalProjects > 0 ? parseFloat(((completeCount / totalProjects) * 100).toFixed(2)) : 0
+        const pendingPrecentage = totalProjects > 0 ? parseFloat(((pending / totalProjects) * 100).toFixed(2)) : 0
+        const rejectedPrecentage = totalProjects > 0 ? parseFloat(((rejectedCount / totalProjects) * 100).toFixed(2)) : 0
         setGigCount(allCount)
         setCompletedCount(completeCount)
         setPendingCount(pending)
-        setRejectedCount(rejectedCount)
+        setRejectCount(rejectedCount)
         setCompletePercentage(completePrecentage)
         setPendingPercentage(pendingPrecentage)
         setRejectedPercentage(rejectedPrecentage)
@@ -87,15 +69,15 @@ const FreelancerDashboard = () => {
             let rating = (feedback / completeCount) * 5
             setRating(rating)
         }
+
     }
 
 
     const {width , height} = Dimensions.get('window')
-    const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 
     return (
      <ScrollView bounces={false} showsVerticalScrollIndicator={false}> 
-      <View style={{ width:width, height:height, alignItems:"center"}}>
+      <View style={{ width:width,alignItems:"center"}}>
         <View className="w-[90%] items-end flex flex-row justify-between gap-4 mt-7 mb-5">
             <View className="flex flex-row gap-4 mt-7 mb-5">
                 <Text className="text-2xl font-semibold text-blue-700">SkillLink</Text>
@@ -148,8 +130,12 @@ const FreelancerDashboard = () => {
                 <Text className="text-2xl font-bold mt-2">{rating.toFixed(1)}</Text>
             </View>
         </View>
-
-    <View className="w-[90%] bg-white p-4 rounded-2xl shadow-sm mb-4">
+    
+    <View className="mb-5">
+        <Advertistments />
+    </View>
+    
+    <View className="w-[90%] bg-white p-4 rounded-2xl shadow-sm mb-5">
         <Text className="text-lg font-bold mb-1">
             Start earning today 🚀
          </Text>
@@ -175,61 +161,37 @@ const FreelancerDashboard = () => {
         </View>
     </View>
     
-      <View className="mt-6 items-center w-[90%] bg-white p-4 rounded-2xl shadow-sm mb-4">
+    <View className="items-center w-[90%] bg-white p-4 rounded-2xl shadow-sm mb-5">
         <Text className="text-xl font-bold mb-3">Project Status Overview</Text>
-        <PieChart
-            data={data}
-            width={width - 40}
-            height={220}
-            chartConfig={{
-            backgroundColor: "#ffffff",
-            backgroundGradientFrom: "#ffffff",
-            backgroundGradientTo: "#ffffff",
-            color: (opacity = 1) => `rgba(0, 123, 255, ${opacity})`,
-            }}
-            accessor="population"
-            backgroundColor="transparent"
-            paddingLeft="15"
-            absolute
-        />
+        {
+            completePercentage + pendingPercentage + rejectedPercentage === 0 ? (
+                <View className="w-full h-40 bg-gray-100 rounded-lg items-center justify-center">
+                    <Ionicons name="bar-chart-outline" size={60} color="#6B7280" />
+                    <Text className="text-gray-500 mt-2">No Data to Display</Text>
+                </View>
+             ) : (
+                 <PieChart
+                    data={data}
+                    width={width - 40}
+                    height={220}
+                    chartConfig={{
+                    backgroundColor: "#ffffff",
+                    backgroundGradientFrom: "#ffffff",
+                    backgroundGradientTo: "#ffffff",
+                    color: (opacity = 1) => `rgba(0, 123, 255, ${opacity})`,
+                    }}
+                    accessor="population"
+                    backgroundColor="transparent"
+                    paddingLeft="15"
+                    absolute
+                />
+            )
+        }  
     </View>
    
-    <View style={{ width: width, height: height / 4, padding: 10 }}>
-                
-                         {/* <FlatList
-                            data={slides}
-                            horizontal
-                            pagingEnabled
-                            showsHorizontalScrollIndicator={false}
-                            keyExtractor={(item) => item.id}
-                            onScroll={ (e) =>{
-                                const contentOffsetX = e.nativeEvent.contentOffset.x
-                                const currentIndex = Math.round(contentOffsetX / width)
-                                setCurrentSlideIndex(currentIndex)
-                            }}
-                            renderItem={({ item }) => (
-                                <View className="flex-1 justify-center items-center rounded-lg h-full" style={{backgroundColor: item.color, width:width-20}}>
-                                   
-                                </View>
-                            )}
-
-                        />
-                        <View className="flex-row justify-center z-10 w-full mt-1">
-                          {
-                              slides.map((index)=> (  
-                                <View className={`h-2 w-2 rounded-full mx-1 ${currentSlideIndex === slides.indexOf(index) ? 'bg-blue-500' : 'bg-gray-300'}`} key={index.id}></View>
-                              ))
-                          }
-                        </View> */}
-
-                        
-
-                
-            </View>
-
-            <Wallet visible={previewVisible} onClose={() => setPreviewVisible(false)} />
+    <Wallet visible={previewVisible} onClose={() => setPreviewVisible(false)} />
             
-        </View>
+    </View>
     </ScrollView>   
     )
 }

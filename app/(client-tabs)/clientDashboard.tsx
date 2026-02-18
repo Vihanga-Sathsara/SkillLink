@@ -9,6 +9,7 @@ import { router } from "expo-router"
 import { useEffect, useState } from "react"
 import { View, Text, ScrollView, Pressable, Image, Dimensions, Alert } from "react-native"
 import ShowProfile from "@/components/ShowProfile"
+import Advertistments from "@/components/advertistments"
 
 
 export default function ClientDashboard() {
@@ -108,7 +109,7 @@ export default function ClientDashboard() {
 
     return (
       <ScrollView>
-      <View style={{ width:width, height:height, alignItems:"center"}}>
+      <View style={{ width:width, alignItems:"center"}}>
         <View className="w-[90%] items-end flex flex-row justify-between gap-4 mt-7 mb-5"> 
             <View>
               <Text className="text-2xl font-semibold text-blue-700">SkillLink</Text>
@@ -122,11 +123,14 @@ export default function ClientDashboard() {
         <View className="w-[90%] mb-5">
           <Text className="text-xl font-semibold">👋 Welcome, {auth.currentUser?.displayName}</Text>
         </View>
-        <View className="w-full mb-5">
-          <Text className="text-3xl text-[#111827] font-bold pl-6 pt-6">Active Gigs</Text>
-          <Text className="font-semibold text-gray-500 pl-6">Monitor your live gigs and make sure everything is on track.</Text>
+        <View className="mb-5">
+                <Advertistments />
         </View>
-
+        <View className="w-full mb-5">
+          <Text className="text-3xl text-[#111827] font-bold pl-6 pt-6">Submitted Gigs</Text>
+          <Text className="font-semibold text-gray-500 pl-6">Review freelancers’ work, pick the best, and hire with confidence.</Text>
+        </View>
+        
       <View className="w-[90%] justify-center items-end mb-5">
         <View className="w-[50%] border rounded-md">
                 <Picker selectedValue={category} onValueChange={(itemValue) => setCategory(itemValue)} >
