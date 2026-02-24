@@ -3,6 +3,7 @@ import { auth, db } from "./firebase"
 import { doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore"
 import { sendPasswordResetEmail } from "firebase/auth"
 
+
 export const registerUser = async (fullName: string, email: string, password: string, role: string) => {
     const userCredentials = await createUserWithEmailAndPassword(auth, email, password)
     await updateProfile(userCredentials.user, { displayName: fullName })
@@ -19,28 +20,6 @@ export const registerUser = async (fullName: string, email: string, password: st
         createdAt: new Date()
     })
     return userCredentials.user
-}
-
-export const googleRegister = async (idToken: string, role: string) => {
-
-  const credentials = GoogleAuthProvider.credential(idToken)
-  
-  const userCredentials = await signInWithCredential(auth, credentials)
-  const user = userCredentials.user
-
-  await setDoc(doc(db, "users", user.uid), {
-    fullName: user.displayName,
-    email: user.email,
-    role,
-    profileImage: "",
-    bannerImage: "",
-    feedback: 0,
-    bio: "",
-    country: "",
-    address: "",
-    createdAt: new Date()
-  })
-  return user
 }
 
 export const loginUser = async (email: string, password: string) => {
@@ -72,7 +51,12 @@ export const updateDetails = async (user: any, updates: any) => {
 }
 
 export const logoutUser = async () => {
-    await signOut(auth)
+    try {
+        await signOut(auth)
+    } catch (error) {
+        console.error("Error signing out: ", error)
+        throw error
+    }
 }
 
 export const getDetailsById = async (uid: string) => {
@@ -144,3 +128,45 @@ export const forgotPassword = async (email: string) => {
         throw error
     }
 }
+
+export const googleLogin = async (idToken: string) => {
+  try {
+        const credentials = GoogleAuthProvider.credential(idToken);
+        const userCred = await signInWithCredential(auth, credentials);
+        const user = userCred.user;
+
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+  if (!userSnap.exists()) {
+    throw new Error("User not registered. Please register first.");
+  }
+  return { user , role: userSnap.data().role }
+  } catch (error) {
+    console.error("Error signing in with Google:", error)
+    throw error
+  }
+}
+
+export const googleRegister = async (idToken: string, role: string) => {
+
+  const credentials = GoogleAuthProvider.credential(idToken)
+  
+  const userCredentials = await signInWithCredential(auth, credentials)
+  const user = userCredentials.user
+
+  await setDoc(doc(db, "users", user.uid), {
+    fullName: user.displayName,
+    email: user.email,
+    role,
+    profileImage: "",
+    bannerImage: "",
+    feedback: 0,
+    bio: "",
+    country: "",
+    address: "",
+    createdAt: new Date()
+  })
+  return user
+}
+

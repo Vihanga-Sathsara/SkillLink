@@ -105,3 +105,15 @@ export const getTotalEarnings = async (uid: string) => {
     )
     return totalEarnings
 }
+
+export const getRequestCountForFreelancer = async (uid: string) => {
+    const q = query(collection(db, "project_requests"), where("freelancerId", "==", uid))
+    const querySnapshot = await getDocs(q)
+    return querySnapshot.docs.length
+}
+
+export const getRequestCountForClient = async (uid: string) => {
+    const q = query(collection(db, "project_requests"), where("clientId", "==", uid))
+    const querySnapshot = await getDocs(q)
+    return querySnapshot.docs.length
+}

@@ -13,13 +13,14 @@
       "bundleIdentifier": "com.dev.skilllink"
     },
     "android": {
-      "package": "com.dev.skilllink",
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
         "foregroundImage": "./assets/images/appicon.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.dev.skilllink",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "output": "static",

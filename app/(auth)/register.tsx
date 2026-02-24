@@ -5,6 +5,7 @@ import { useLoader } from "@/hooks/useLoader"
 import { registerUser } from "@/service/authService"
 import { Ionicons } from "@expo/vector-icons"
 import { AntDesign } from "@expo/vector-icons"
+import { useGoogleAuth } from "@/hooks/useGoogleAuth"
 
 const Register = () => {
     const [ fullName, setFullName ] = React.useState("")
@@ -65,6 +66,8 @@ const Register = () => {
         }
     }
 
+    const { request, promptAsync } = useGoogleAuth(role)
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
@@ -87,7 +90,7 @@ const Register = () => {
                         </View>
                         
                         <View className="w-full items-center">
-                            <Pressable className="w-full items-center flex flex-row justify-center bg-red-100 border border-gray-300 p-3 rounded-md mb-4">
+                            <Pressable className="w-full items-center flex flex-row justify-center bg-red-100 border border-gray-300 p-3 rounded-md mb-4" onPress={() => promptAsync()}>
                                 <AntDesign name="google" size={20} color="red" />
                                 <Text className="text-lg pl-3">Google Register</Text>
                             </Pressable>

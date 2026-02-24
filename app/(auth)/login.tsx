@@ -1,11 +1,12 @@
 import { useLoader } from "@/hooks/useLoader"
-import { forgotPassword, loginUser } from "@/service/authService"
+import { loginUser } from "@/service/authService"
 import { Ionicons } from "@expo/vector-icons"
 import { router } from "expo-router"
 import React from "react"
 import { AntDesign } from "@expo/vector-icons"
 import { View, Text, Dimensions, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView, Platform,Image, Alert } from "react-native"
 import ForgetPassword from "@/components/ForgetPassword"
+import { useGoogleAuth, useGoogleLogin } from "@/hooks/useGoogleAuth"
 
 
 const Login = () => {
@@ -64,6 +65,8 @@ const loginUserWithEmailAndPassword = async (email: string, password: string) =>
     }
 }
 
+const {request , promptAsync } = useGoogleLogin()
+
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
@@ -77,7 +80,7 @@ const loginUserWithEmailAndPassword = async (email: string, password: string) =>
                       <Text className="text-center font-semibold text-gray-500 mb-5">Login to access your account and connect with professionals or clients instantly.</Text>
                       <Text className="text-2xl font-bold mb-4">Login</Text>
                       <View className="w-full items-center">
-                        <Pressable className="w-full items-center flex flex-row justify-center bg-red-100 border border-gray-300 p-3 gap-5 rounded-md mb-4">
+                        <Pressable className="w-full items-center flex flex-row justify-center bg-red-100 border border-gray-300 p-3 gap-5 rounded-md mb-4" onPress={() => promptAsync()}>
                           <AntDesign name="google" size={20} color="red" />
                           <Text className="text-lg pl-3">Google Login</Text>
                         </Pressable>
